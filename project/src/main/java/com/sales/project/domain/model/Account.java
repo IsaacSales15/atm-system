@@ -1,13 +1,13 @@
 package com.sales.project.domain.model;
 
-import com.sales.project.domain.valueobject.Name;
-import com.sales.project.domain.valueobject.Pin;
-import com.sales.project.domain.valueobject.Balance;
+import com.sales.project.domain.valueobject.account.Balance;
+import com.sales.project.domain.valueobject.account.Name;
+import com.sales.project.domain.valueobject.account.Pin;
 
 import jakarta.persistence.*;
 
 @Entity
-public class Conta {
+public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,9 +21,9 @@ public class Conta {
     @Embedded
     private Balance balance;
 
-    protected Conta() {}
+    protected Account() {}
 
-    public Conta(Name name, Pin pin, Balance balance) {
+    public Account(Name name, Pin pin, Balance balance) {
         this.name = name;
         this.pin = pin;
         this.balance = balance;
