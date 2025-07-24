@@ -1,8 +1,6 @@
 package com.sales.project.domain.model;
 
-import com.sales.project.domain.valueobject.account.Balance;
-import com.sales.project.domain.valueobject.account.Name;
-import com.sales.project.domain.valueobject.account.Pin;
+import com.sales.project.domain.valueobject.account.*;
 
 import jakarta.persistence.*;
 
@@ -13,22 +11,22 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Embedded
-    @Column(nullable = false, length = 100)
-    private Name name;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
 
     @Embedded
-    @Column(nullable = false, length = 6)
+    @AttributeOverride(name = "value", column = @Column( name = "pin_value", nullable = false))
     private Pin pin;
 
     @Embedded
-    @Column(nullable = false)
+    @AttributeOverride(name = "value", column = @Column( name = "balance_value", nullable = false))
     private Balance balance;
 
     protected Account() {}
 
-    public Account(Name name, Pin pin, Balance balance) {
-        this.name = name;
+    public Account(Client client, Pin pin, Balance balance) {
+        this.client = client;
         this.pin = pin;
         this.balance = balance;
     }

@@ -1,4 +1,4 @@
-package com.sales.project.domain.valueobject.account;
+package com.sales.project.domain.valueobject.client;
 
 import jakarta.persistence.Embeddable;
 import java.util.Objects;
