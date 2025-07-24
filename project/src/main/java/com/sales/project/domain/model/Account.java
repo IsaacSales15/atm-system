@@ -7,18 +7,22 @@ import com.sales.project.domain.valueobject.account.Pin;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "accounts")
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Embedded
+    @Column(nullable = false, length = 100)
     private Name name;
 
     @Embedded
+    @Column(nullable = false, length = 6)
     private Pin pin;
 
     @Embedded
+    @Column(nullable = false)
     private Balance balance;
 
     protected Account() {}
