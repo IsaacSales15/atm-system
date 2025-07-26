@@ -5,8 +5,11 @@ import java.util.List;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import com.sales.project.domain.repository.ClientRepository;
+import com.sales.project.application.service.ClientService;
+import com.sales.project.application.dto.ClientDTO;
 import com.sales.project.domain.model.Client;
 
 @RestController
