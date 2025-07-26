@@ -1,4 +1,4 @@
-package com.sales.project.adapter.web;
+package com.sales.project.adapter.web.controller;
 
 import java.util.List;
 

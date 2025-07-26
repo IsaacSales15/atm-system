@@ -1,5 +1,8 @@
 package com.sales.project.application.service;
 
+import com.sales.project.domain.exception.CpfAlreadyExistsException;
+import com.sales.project.domain.exception.InvalidClientException;
+
 import com.sales.project.domain.model.Client;
 import com.sales.project.domain.repository.ClientRepository;
 import com.sales.project.domain.valueobject.client.Name;
@@ -18,8 +21,8 @@ public class ClientService {
     }
 
     public Client createClient(String name, String cpf) {
-        if(repo.existsByCpf(cpf)) {
-            throw new IllegalArgumentException("CPF já cadastrado");
+        if(repo.existsByCpf(new Cpf(cpf))) {
+            throw new CpfAlreadyExistsException("CPF já cadastrado");
         }
         Name clientName = new Name(name);
         Cpf clientCpf = new Cpf(cpf);
@@ -31,9 +34,10 @@ public class ClientService {
     }
 
     public Client getByCpf(String cpf) {
-        Client client = repo.findByCpf(cpf);
+        Cpf clientCpf = new Cpf(cpf);
+        Client client = repo.findByCpf(clientCpf);
         if (client == null) {
-            throw new IllegalArgumentException("Cliente não encontrado com CPF: " + cpf);
+            throw new InvalidClientException("Cliente não encontrado com CPF: " + cpf);
         }
         return client;
     }
@@ -45,7 +49,7 @@ public class ClientService {
     public Client updateClient(Long id, String name, String cpf) {
         var existingClient = repo.findById(id);
         Client client = existingClient
-                .orElseThrow(() -> new IllegalArgumentException("Cliente não encontrado com ID: " + id));
+                .orElseThrow(() -> new InvalidClientException("Cliente não encontrado com ID: " + id));
 
        client.updateName(new Name(name));
        client.updateCpf(new Cpf(cpf)); 

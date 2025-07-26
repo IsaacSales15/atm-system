@@ -1,13 +1,10 @@
 package com.sales.project.domain.model;
 
-import com.sales.project.domain.valueobject.client.Name;
-
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
+import com.sales.project.domain.valueobject.client.Name;
 import com.sales.project.domain.valueobject.client.Cpf;
-
-import jakarta.persistence.*;
 
 @Entity
 @Table(name = "clients")
