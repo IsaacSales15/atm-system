@@ -64,7 +64,17 @@ public class Client {
         this.cpf = newCpf;
     }
 
+    // Puramente gambiarra para que eu possa usar o método getAccountNumber(), em breve vou
+    // arrumar essa bagunça
+    public String getAccountNumber() {
+        if (accounts.isEmpty()) {
+            throw new IllegalStateException("Cliente não possui contas");
+        }
+        return accounts.get(getId().intValue()).toString(); 
+    }
+
     public Long getId() {
         return id;
     }
+
 }

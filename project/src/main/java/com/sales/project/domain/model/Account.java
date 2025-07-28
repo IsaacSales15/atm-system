@@ -1,8 +1,8 @@
 package com.sales.project.domain.model;
 
 import com.sales.project.domain.valueobject.account.*;
-
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "accounts")
@@ -48,7 +48,22 @@ public class Account {
         }
     }
 
+    public void updatePin(Pin newPin) {
+        if (newPin == null || this.pin.equals(newPin)) {
+            throw new IllegalArgumentException("PIN inválido ou já existente");
+        }
+        this.pin = newPin;
+    }
+
+    public void updateBalance(Balance newBalance) {
+        if (newBalance == null || newBalance.value().compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Saldo inválido");
+        }
+        this.balance = newBalance;
+    }
+
     public Balance getBalance(){
         return balance;
     }
+
 }
