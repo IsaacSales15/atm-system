@@ -11,7 +11,8 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "account_number", unique = true, nullable = false)
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "account_number", nullable = false, unique = true))
     private AccountNumber accountNumber;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
