@@ -1,12 +1,10 @@
 package com.sales.project.application.service;
 
-import com.sales.project.domain.exception.CpfAlreadyExistsException;
-import com.sales.project.domain.exception.InvalidClientException;
-
+import com.sales.project.domain.exception.client.CpfAlreadyExistsException;
+import com.sales.project.domain.exception.client.InvalidClientException;
 import com.sales.project.domain.model.Client;
 import com.sales.project.domain.repository.ClientRepository;
-import com.sales.project.domain.valueobject.client.Name;
-import com.sales.project.domain.valueobject.client.Cpf;
+import com.sales.project.domain.valueobject.client.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,6 +38,16 @@ public class ClientService {
             throw new InvalidClientException("Cliente não encontrado com CPF: " + cpf);
         }
         return client;
+    }
+
+    public Client getById(Long id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new InvalidClientException("Cliente não encontrado com ID: " + id));
+    }
+
+    public Client getById(ClientId clientId) {
+        return repo.findById(Long.parseLong(clientId.getValue()))
+                .orElseThrow(() -> new InvalidClientException("Cliente não encontrado com ID: " + clientId.getValue()));
     }
 
     public List<Client> getAllClients() {

@@ -1,60 +1,63 @@
 package com.sales.project.application.service;
 
+import com.sales.project.domain.exception.account.AccountAlreadyExistsException;
+import com.sales.project.domain.exception.account.AccountNotFoundException;
 import com.sales.project.domain.model.Account;
 import com.sales.project.domain.repository.AccountRepository;
+import com.sales.project.domain.model.Client;
 
 import java.math.BigDecimal;
-
 import org.springframework.stereotype.Service;
-
-import com.sales.project.domain.valueobject.account.Pin;
-import com.sales.project.domain.valueobject.account.Balance;
-import com.sales.project.domain.model.Client;
+import com.sales.project.domain.valueobject.account.*;
+import com.sales.project.domain.valueobject.client.ClientId;
 
 @Service
 public class AccountService {
-    private final AccountRepository repo;
+    private final AccountRepository accountRepository;
+    private final ClientService clientService;
 
-    public AccountService(AccountRepository repo) {
-        this.repo = repo;
+    public AccountService(AccountRepository accountRepository, ClientService clientSerice) {
+        this.accountRepository = accountRepository;
+        this.clientService = clientSerice;
     }
 
-    public Account createAccount(Client client, String pin, BigDecimal balance) {
-        if (repo.existsByAccountNumber(client.getAccountNumber())) {
-            throw new IllegalArgumentException("Número da conta já cadastrado");
+    public Account createAccount(ClientId clientId, String pin, BigDecimal balance, String accountNumber) {
+        if (accountRepository.existsByAccountNumber(accountNumber)) {
+            throw new AccountAlreadyExistsException(accountNumber);
         }
-        Pin accountPin = new Pin(pin);
-        Balance accountBalance = new Balance(balance);
-        return repo.save(new Account(client, accountPin, accountBalance));
+
+        Client client = clientService.getById(clientId);
+        Pin newPin = new Pin(pin);
+        Balance newBalance = new Balance(balance);
+        AccountNumber number = new AccountNumber(accountNumber);
+
+        return accountRepository.save(new Account(client, newPin, newBalance, number));
     }
 
     public Account getAccountByNumber(String accountNumber) {
-        Account account = repo.findByAccountNumber(accountNumber);
+        Account account = accountRepository.findByAccountNumber(accountNumber);
         if (account == null) {
-            throw new IllegalArgumentException("Conta não encontrada com número: " + accountNumber);
+            throw new AccountNotFoundException(accountNumber);
         }
         return account;
     }
 
     public void deleteAccountByNumber(String accountNumber) {
-        if (!repo.existsByAccountNumber(accountNumber)) {
-            throw new IllegalArgumentException("Conta não encontrada com número: " + accountNumber);
+        if (!accountRepository.existsByAccountNumber(accountNumber)) {
+            throw new AccountNotFoundException(accountNumber);
         }
-        repo.deleteByAccountNumber(accountNumber);
+        accountRepository.deleteByAccountNumber(accountNumber);
     }
 
     public Account updateAccountPin(String accountNumber, String newPin) {
         Account account = getAccountByNumber(accountNumber);
-        Pin updatedPin = new Pin(newPin);
-        account.updatePin(updatedPin);
-        return repo.save(account);
+        account.updatePin(new Pin(newPin));
+        return accountRepository.save(account);
     }
 
     public Account updateAccountBalance(String accountNumber, BigDecimal newBalance) {
         Account account = getAccountByNumber(accountNumber);
-        Balance updatedBalance = new Balance(newBalance);
-        account.updateBalance(updatedBalance);
-        return repo.save(account);
+        account.updateBalance(new Balance(newBalance));
+        return accountRepository.save(account);
     }
-
 }

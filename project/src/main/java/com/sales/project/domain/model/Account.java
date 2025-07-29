@@ -11,24 +11,33 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "account_number", unique = true, nullable = false)
+    private AccountNumber accountNumber;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
     @Embedded
-    @AttributeOverride(name = "value", column = @Column( name = "pin_value", nullable = false))
+    @AttributeOverride(name = "value", column = @Column(name = "pin_value", nullable = false))
     private Pin pin;
 
     @Embedded
-    @AttributeOverride(name = "value", column = @Column( name = "balance_value", nullable = false))
+    @AttributeOverride(name = "value", column = @Column(name = "balance_value", nullable = false))
     private Balance balance;
 
-    protected Account() {}
+    protected Account() {
+    }
 
-    public Account(Client client, Pin pin, Balance balance) {
+    public Account(Client client, Pin pin, Balance balance, AccountNumber accountNumber) {
         this.client = client;
         this.pin = pin;
         this.balance = balance;
+        this.accountNumber = generateAccountNumber();
+    }
+
+    private AccountNumber generateAccountNumber() {
+        return new AccountNumber("ACCT-" + System.currentTimeMillis());
     }
 
     public void deposit(Balance amount) {
@@ -36,7 +45,7 @@ public class Account {
     }
 
     public void withdraw(Balance amount) {
-        if(balance.lessThan(amount)){
+        if (balance.lessThan(amount)) {
             throw new IllegalStateException("Saldo insuficiente");
         }
         this.balance = balance.subtract(amount);
@@ -62,7 +71,7 @@ public class Account {
         this.balance = newBalance;
     }
 
-    public Balance getBalance(){
+    public Balance getBalance() {
         return balance;
     }
 

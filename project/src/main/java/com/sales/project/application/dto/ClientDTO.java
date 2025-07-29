@@ -1,6 +1,5 @@
 package com.sales.project.application.dto;
 
-
 public record ClientDTO(String name, String cpf) {
     public ClientDTO {
         if (name == null || name.isBlank()) {

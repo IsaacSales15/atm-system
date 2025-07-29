@@ -1,11 +1,11 @@
 package com.sales.project.adapter.web.exception;
 
-import com.sales.project.domain.exception.CpfAlreadyExistsException;
-import com.sales.project.domain.exception.InvalidClientException;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.sales.project.domain.exception.client.CpfAlreadyExistsException;
+import com.sales.project.domain.exception.client.InvalidClientException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

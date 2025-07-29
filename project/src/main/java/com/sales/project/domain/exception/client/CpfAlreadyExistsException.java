@@ -1,4 +1,4 @@
-package com.sales.project.domain.exception;
+package com.sales.project.domain.exception.client;
 
 public class CpfAlreadyExistsException extends RuntimeException {
     public CpfAlreadyExistsException(String message) {
