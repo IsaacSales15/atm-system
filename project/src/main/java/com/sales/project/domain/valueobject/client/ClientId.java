@@ -1,18 +1,26 @@
 package com.sales.project.domain.valueobject.client;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+
 import java.util.Objects;
 
+@Embeddable
 public class ClientId {
-    private final String value;
 
-    public ClientId(String value) {
-        if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException("Client ID cannot be null or blank");
+    @Column(name = "client_id")
+    private Long value;
+
+    protected ClientId() {}
+
+    public ClientId(Long value) {
+        if (value == null || value <= 0) {
+            throw new IllegalArgumentException("ID do cliente inválido.");
         }
         this.value = value;
     }
 
-    public String getValue() {
+    public Long getValue() {
         return value;
     }
 
@@ -31,8 +39,6 @@ public class ClientId {
 
     @Override
     public String toString() {
-        return "ClientId{" +
-                "value='" + value + '\'' +
-                '}';
+        return value.toString();
     }
 }

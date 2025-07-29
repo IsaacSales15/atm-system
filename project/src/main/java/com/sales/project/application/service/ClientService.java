@@ -46,7 +46,7 @@ public class ClientService {
     }
 
     public Client getById(ClientId clientId) {
-        return repo.findById(Long.parseLong(clientId.getValue()))
+        return repo.findById(clientId.getValue())
                 .orElseThrow(() -> new InvalidClientException("Cliente não encontrado com ID: " + clientId.getValue()));
     }
 
